@@ -17,13 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extended character support
 - Italic variant
 
-## [1.0.0] - 2024-04-19
+## [1.312] - 2024-04-19
 
 ### Added
 - Initial release of Glacial Indifference
-- Regular weight in Glyphs source format
+- Regular and Bold weights in Glyphs source format
 - Basic Latin character set
 - Open Font License (OFL)
 
-[Unreleased]: https://github.com/marcologous/glacial-indifference/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/marcologous/glacial-indifference/releases/tag/v1.0.0
+[Unreleased]: https://github.com/marcologous/glacial-indifference/compare/v1.312...HEAD
+[1.312]: https://github.com/marcologous/glacial-indifference/releases/tag/v1.312

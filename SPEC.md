@@ -8,7 +8,7 @@
 | Designer | Alfredo Marco Pradil |
 | Foundry | Hanken Design Co. |
 | License | SIL Open Font License 1.1 |
-| Version | 1.0.0 |
+| Version | 1.312 |
 | Release Date | April 2024 |
 
 ## Classification
@@ -22,6 +22,7 @@
 | Weight | Name | File | Vertical Metrics |
 |--------|------|------|------------------|
 | Regular | Glacial Indifference Regular | GlacialIndifference-Regular.otf | OS/2, hhea, vhea |
+| Bold | Glacial Indifference Bold | GlacialIndifference-Bold.otf | OS/2, hhea, vhea |
 
 ## Character Set
 
