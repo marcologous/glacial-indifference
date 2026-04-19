@@ -3,7 +3,7 @@
 PYTHON := python3
 FONTNAME := GlacialIndifference
 VERSION := 1.312
-SOURCES := sources/$(FONTNAME)_1312.glyphs
+SOURCES := sources/$(FONTNAME).glyphs
 BUILD_DIR := build
 DIST_DIR := dist
 FONTS_DIR := fonts
