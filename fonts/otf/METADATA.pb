@@ -11,6 +11,7 @@ fonts {
   filename: "GlacialIndifference-Regular.otf"
   post_script_name: "GlacialIndifference-Regular"
   full_name: "Glacial Indifference Regular"
+  copyright: "Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)"
 }
 
 fonts {
@@ -20,6 +21,7 @@ fonts {
   filename: "GlacialIndifference-Bold.otf"
   post_script_name: "GlacialIndifference-Bold"
   full_name: "Glacial Indifference Bold"
+  copyright: "Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)"
 }
 
 source {
