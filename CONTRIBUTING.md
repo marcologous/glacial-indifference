@@ -4,7 +4,7 @@ Thank you for your interest in contributing to Glacial Indifference!
 
 ## Code of Conduct
 
-By participating in this project, you are expected to uphold our [Code of Conduct](CODE_OF_CONDUCT.md). Please report unacceptable behavior to hankendesignco@gmail.com.
+By participating in this project, you are expected to uphold our [Code of Conduct](CODE_OF_CONDUCT.md). Please report unacceptable behavior to hello@hanken.co.
 
 ## How Can I Contribute?
 

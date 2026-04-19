@@ -91,7 +91,7 @@ We use [SemVer](http://semver.org/) for versioning. Available versions are liste
 
 ## Authors
 
-- **Alfredo Marco Pradil** - *Initial design* - [Hanken Design Co.](https://hankendesign.co)
+- **Alfredo Marco Pradil** - *Initial design* - [Hanken Design Co.](https://hanken.co)
 
 ## Acknowledgments
 
@@ -100,8 +100,8 @@ We use [SemVer](http://semver.org/) for versioning. Available versions are liste
 
 ## Contact
 
-- Website: https://hankendesign.co
-- Email: hankendesignco@gmail.com
+- Website: https://hanken.co
+- Email: hello@hanken.co
 
 ---
 
