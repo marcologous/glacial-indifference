@@ -24,8 +24,8 @@ jobs:
           python-version: "3.12"
           cache: 'pip'
 
-      - name: Install FontBakery
-        run: pip install fontbakery
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
       - name: Find font files
         run: |
@@ -34,7 +34,7 @@ jobs:
 
       - name: Run FontBakery
         run: |
-          if [ -f "sources/"*.glyphs ]; then
+          if ls sources/*.glyphs 1> /dev/null 2>&1; then
             fontbakery check-googlefonts --verbose --html reporters/index.html --json reporters/index.json sources/ || exit 0
           else
             echo "No source files found, skipping FontBakery"

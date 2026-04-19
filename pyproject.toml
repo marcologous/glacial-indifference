@@ -1,0 +1,28 @@
+[project]
+name = "glacial-indifference"
+version = "1.312"
+description = "Glacial Indifference - A free and open source display typeface"
+authors = [
+    {name = "Alfredo Marco Pradil", email = "hello@hanken.co"}
+]
+readme = "README.md"
+license = {text = "OFL-1.1"}
+keywords = ["font", "display", "sans-serif", "opentype"]
+classifiers = [
+    "License :: OSI Approved :: SIL Open Font License 1.1 (OFL)",
+    "Programming Language :: Python :: 3",
+    "Typography :: Fonts",
+]
+
+[project.urls]
+Homepage = "https://github.com/marcologous/glacial-indifference"
+Repository = "https://github.com/marcologous/glacial-indifference"
+Issues = "https://github.com/marcologous/glacial-indifference/issues"
+
+[build-system]
+requires = ["fontmake", "fonttools"]
+build-backend = "setuptools.build_meta"
+
+[tool.fontbakery]
+# FontBakery configuration
+profile = "googlefonts"
