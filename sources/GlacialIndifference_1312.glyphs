@@ -1,9 +1,5 @@
 {
-.appVersion = "3234";
-DisplayStrings = (
-A,
-"rasputin/space GEgASFDNIO"
-);
+.appVersion = "3524";
 classes = (
 {
 automatic = 1;
@@ -13,10 +9,6 @@ name = Uppercase;
 );
 copyright = "Copyright © 2020 by Alfredo Marco Pradil. All rights reserved.";
 customParameters = (
-{
-name = description;
-value = "Copyright 2019 Alfredo Marco Pradil (https://hanken.co/), with Reserved Font Name \"Glacial Indifference\".\012\012\012This Font Software is licensed under the SIL Open Font License, Version 1.1.\012This license is copied below, and is also available with a FAQ at:\012http://scripts.sil.org/OFL";
-},
 {
 name = license;
 value = "Copyright 2019 Alfredo Marco Pradil (https://hanken.co/), with Reserved Font Name \"Glacial Indifference\".\012\012\012This Font Software is licensed under the SIL Open Font License, Version 1.1.\012This license is copied below, and is also available with a FAQ at:\012http://scripts.sil.org/OFL";
@@ -125,15 +117,15 @@ value = -269;
 },
 {
 name = typoLineGap;
-value = 269;
+value = 0;
 },
 {
 name = winAscent;
-value = 1000;
+value = 1020;
 },
 {
 name = winDescent;
-value = 269;
+value = 289;
 },
 {
 name = hheaAscender;
@@ -196,15 +188,15 @@ value = -269;
 },
 {
 name = typoLineGap;
-value = 269;
+value = 0;
 },
 {
 name = winAscent;
-value = 1000;
+value = 1020;
 },
 {
 name = winDescent;
-value = 269;
+value = 289;
 },
 {
 name = hheaAscender;
@@ -239,7 +231,7 @@ glyphs = (
 {
 color = 1;
 glyphname = A;
-lastChange = "2021-04-10 01:02:13 +0000";
+lastChange = "2026-04-19 13:09:13 +0000";
 layers = (
 {
 anchors = (
@@ -253,7 +245,7 @@ position = "{655, 0}";
 },
 {
 name = top;
-position = "{334, 731}";
+position = "{336, 731}";
 }
 );
 background = {
@@ -355,7 +347,7 @@ unicode = 0041;
 {
 color = 9;
 glyphname = Aacute;
-lastChange = "2021-04-10 01:02:14 +0000";
+lastChange = "2026-04-19 13:11:19 +0000";
 layers = (
 {
 components = (
@@ -364,7 +356,7 @@ name = A;
 },
 {
 name = acutecomb.case;
-transform = "{1, 0, 0, 1, 268, 0}";
+transform = "{1, 0, 0, 1, 270, 0}";
 }
 );
 layerId = "8670B77F-1251-4A2E-B6AD-277DCBE52A55";
@@ -399,7 +391,7 @@ name = A;
 },
 {
 name = brevecomb.case;
-transform = "{1, 0, 0, 1, 134, 0}";
+transform = "{1, 0, 0, 1, 136, 0}";
 }
 );
 layerId = "8670B77F-1251-4A2E-B6AD-277DCBE52A55";
@@ -434,7 +426,7 @@ name = A;
 },
 {
 name = caroncomb.case;
-transform = "{1, 0, 0, 1, 152, 0}";
+transform = "{1, 0, 0, 1, 154, 0}";
 }
 );
 layerId = "8670B77F-1251-4A2E-B6AD-277DCBE52A55";
@@ -470,7 +462,7 @@ name = A;
 },
 {
 name = circumflexcomb.case;
-transform = "{1, 0, 0, 1, 154, 0}";
+transform = "{1, 0, 0, 1, 156, 0}";
 }
 );
 layerId = "8670B77F-1251-4A2E-B6AD-277DCBE52A55";
@@ -506,7 +498,7 @@ name = A;
 },
 {
 name = dieresiscomb.case;
-transform = "{1, 0, 0, 1, 130, 0}";
+transform = "{1, 0, 0, 1, 132, 0}";
 }
 );
 layerId = "8670B77F-1251-4A2E-B6AD-277DCBE52A55";
@@ -577,7 +569,7 @@ name = A;
 },
 {
 name = gravecomb.case;
-transform = "{1, 0, 0, 1, 162, 0}";
+transform = "{1, 0, 0, 1, 164, 0}";
 }
 );
 layerId = "8670B77F-1251-4A2E-B6AD-277DCBE52A55";
@@ -613,7 +605,7 @@ name = A;
 },
 {
 name = macroncomb;
-transform = "{1, 0, 0, 1, 104, 258}";
+transform = "{1, 0, 0, 1, 106, 258}";
 }
 );
 layerId = "8670B77F-1251-4A2E-B6AD-277DCBE52A55";
@@ -758,7 +750,7 @@ name = A;
 },
 {
 name = tildecomb.case;
-transform = "{1, 0, 0, 1, 100, 0}";
+transform = "{1, 0, 0, 1, 102, 0}";
 }
 );
 layerId = "8670B77F-1251-4A2E-B6AD-277DCBE52A55";
