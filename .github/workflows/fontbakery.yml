@@ -22,20 +22,23 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: 'pip'
 
       - name: Install FontBakery
-        run: |
-          python -m pip install --upgrade pip
-          pip install fontbakery
+        run: pip install fontbakery
 
       - name: Find font files
-        id: find-fonts
         run: |
-          echo "fonts=$(find . -name '*.ttf' -o -name '*.otf' -o -name '*.glyphs' | head -20)" >> $GITHUB_OUTPUT
+          find . -name '*.ttf' -o -name '*.otf' -o -name '*.glyphs' > font_files.txt || true
+          echo "Found font files: $(cat font_files.txt)"
 
       - name: Run FontBakery
         run: |
-          fontbakery check-googlefonts --verbose --html reporters/index.html --json reporters/index.json sources/ || true
+          if [ -f "sources/"*.glyphs ]; then
+            fontbakery check-googlefonts --verbose --html reporters/index.html --json reporters/index.json sources/ || exit 0
+          else
+            echo "No source files found, skipping FontBakery"
+          fi
 
       - name: Upload reports
         if: always()

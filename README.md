@@ -2,8 +2,6 @@
 
 A free and open source display typeface with a bold, contemporary aesthetic.
 
-![Font specimen](specimen.png)
-
 ## About
 
 Glacial Indifference is a modern display typeface designed for impactful headlines and bold statements. With its clean geometric forms and distinctive character, it brings a fresh voice to any design project.

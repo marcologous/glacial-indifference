@@ -114,3 +114,7 @@ build/
 output/
 *.glif
 *.glft
+
+# FontBakery reports
+reporters/
+font_files.txt

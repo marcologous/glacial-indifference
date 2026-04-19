@@ -21,14 +21,14 @@ build: otf ttf
 otf:
 	@echo "Building OTF fonts..."
 	@mkdir -p $(BUILD_DIR)/otf
-	$(PYTHON) -m fontTools build $(SOURCES) --output-dir $(BUILD_DIR)/otf
+	$(PYTHON) -m fontmake -m $(SOURCES) -o otf --output-path $(BUILD_DIR)/otf/$(FONTNAME)-Regular.otf
 
 # Build TTF fonts
 .PHONY: ttf
 ttf:
 	@echo "Building TTF fonts..."
 	@mkdir -p $(BUILD_DIR)/ttf
-	$(PYTHON) -m fontTools build $(SOURCES) --output-dir $(BUILD_DIR)/ttf
+	$(PYTHON) -m fontmake -m $(SOURCES) -o ttf --output-path $(BUILD_DIR)/ttf/$(FONTNAME)-Regular.ttf
 
 # Build web fonts (WOFF2)
 .PHONY: webfonts
@@ -60,7 +60,7 @@ clean:
 # Install build dependencies
 .PHONY: install-deps
 install-deps:
-	$(PYTHON) -m pip install fonttools brotli zopfli woff2
+	$(PYTHON) -m pip install fonttools fontmake brotli zopfli woff2
 
 # Help
 .PHONY: help
