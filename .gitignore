@@ -102,18 +102,23 @@ dmypy.json
 .DS_Store
 *.DS_Store
 
-# Font files (keep source files)
+# Font files (keep source files in fonts/ folder)
 *.ttf
 *.otf
 *.woff
 *.woff2
-!fonts/*
+!fonts/otf/*
+!fonts/ttf/*
+!fonts/woff/*
+!fonts/woff2/*
 
 # Build artifacts
 build/
+master_ufo/
 output/
 *.glif
 *.glft
+*.designspace
 
 # FontBakery reports
 reporters/
