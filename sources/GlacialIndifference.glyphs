@@ -7,11 +7,11 @@ code = "A Aacute Abreve Acaron Acircumflex Adieresis Adotbelow Agrave Amacron Ao
 name = Uppercase;
 }
 );
-copyright = "Copyright © 2019 by Alfredo Marco Pradil";
+copyright = "Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)";
 customParameters = (
 {
 name = license;
-value = "Copyright 2019 Alfredo Marco Pradil (https://hanken.co/).\012\012This Font Software is licensed under the SIL Open Font License, Version 1.1.\012This license is copied below, and is also available with a FAQ at:\012http://scripts.sil.org/OFL";
+value = "Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)\012\012This Font Software is licensed under the SIL Open Font License, Version 1.1.\012This license is copied below, and is also available with a FAQ at:\012http://scripts.sil.org/OFL";
 },
 {
 name = licenseURL;
