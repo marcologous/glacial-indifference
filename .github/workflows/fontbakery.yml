@@ -1,0 +1,46 @@
+name: FontBakery Quality Checks
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  fontbakery:
+    name: FontBakery Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install FontBakery
+        run: |
+          python -m pip install --upgrade pip
+          pip install fontbakery
+
+      - name: Find font files
+        id: find-fonts
+        run: |
+          echo "fonts=$(find . -name '*.ttf' -o -name '*.otf' -o -name '*.glyphs' | head -20)" >> $GITHUB_OUTPUT
+
+      - name: Run FontBakery
+        run: |
+          fontbakery check-googlefonts --verbose --html reporters/index.html --json reporters/index.json sources/ || true
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fontbakery-reports
+          path: reporters/
+          retention-days: 30
