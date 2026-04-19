@@ -27,3 +27,6 @@ fonts {
 source {
   repository_url: "https://github.com/marcologous/glacial-indifference"
 }
+
+subsets: "latin"
+subsets: "menu"
