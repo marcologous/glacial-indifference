@@ -15,8 +15,8 @@ VERSION := 1.312
 SOURCES := sources/$(FONTNAME).glyphs
 DIST_DIR := dist
 FONTS_DIR := fonts
-TTF_DIR := $(FONTS_DIR)/ttf
-OTF_DIR := $(FONTS_DIR)/otf
+TTF_DIR := $(BUILD_DIR)/ttf
+OTF_DIR := $(BUILD_DIR)/otf
 REPORTERS := reporters
 
 # ── Default ──────────────────────────────────────────────────
@@ -71,7 +71,7 @@ package: all
 # ── Clean ─────────────────────────────────────────────────────────
 .PHONY: clean
 clean:
-	rm -rf $(DIST_DIR) $(FONTS_DIR)/ttf $(FONTS_DIR)/otf $(FONTS_DIR)/woff $(FONTS_DIR)/woff2 $(REPORTERS)
+	rm -rf $(BUILD_DIR) $(DIST_DIR) $(FONTS_DIR) $(REPORTERS)
 
 # ── Install dependencies ────────────────────────────────────────────
 .PHONY: install-deps
