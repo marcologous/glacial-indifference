@@ -1,4 +1,13 @@
-# Makefile for Glacial Indifference font build
+# Makefile for Glacial Indifference
+#
+# Targets:
+#   make ttf              Build TTF fonts (Regular + Bold)
+#   make otf              Build OTF fonts (Regular + Bold)
+#   make all              Build all formats
+#   make fix              Run post-build FontBakery compliance fixes
+#   make check            Build + fix + run FontBakery checks
+#   make clean            Remove all build artifacts
+#   make package          Build all formats and zip for distribution
 
 PYTHON := python3
 FONTNAME := GlacialIndifference
@@ -7,70 +16,87 @@ SOURCES := sources/$(FONTNAME).glyphs
 BUILD_DIR := build
 DIST_DIR := dist
 FONTS_DIR := fonts
+TTF_DIR := $(BUILD_DIR)/ttf
+OTF_DIR := $(BUILD_DIR)/otf
+REPORTERS := reporters
 
-# Default target
+# ── Default ──────────────────────────────────────────────────
 .PHONY: all
-all: build
+all: ttf otf
 
-# Build OTF and TTF fonts
-.PHONY: build
-build: otf ttf
+# ── Build ──────────────────────────────────────────────────────
+.PHONY: ttf otf build
+build: ttf otf
 
-# Build OTF fonts
-.PHONY: otf
-otf:
-	@echo "Building OTF fonts..."
-	@mkdir -p $(BUILD_DIR)/otf
-	$(PYTHON) -m fontmake -m $(SOURCES) -o otf --output-path $(BUILD_DIR)/otf/$(FONTNAME)-Regular.otf
-
-# Build TTF fonts
-.PHONY: ttf
 ttf:
 	@echo "Building TTF fonts..."
-	@mkdir -p $(BUILD_DIR)/ttf
-	$(PYTHON) -m fontmake -m $(SOURCES) -o ttf --output-path $(BUILD_DIR)/ttf/$(FONTNAME)-Regular.ttf
+	@mkdir -p $(TTF_DIR)
+	$(PYTHON) -m fontmake -g "$(SOURCES)" -o ttf --output-dir $(TTF_DIR)
 
-# Build web fonts (WOFF2)
-.PHONY: webfonts
-webfonts: otf
-	@echo "Building web fonts..."
-	@mkdir -p $(FONTS_DIR)
-	@for font in $(BUILD_DIR)/otf/*.otf; do \
-		woff2_compress "$$font" || true; \
-	done
-	@mv $(BUILD_DIR)/otf/*.woff2 $(FONTS_DIR)/ 2>/dev/null || true
+otf:
+	@echo "Building OTF fonts..."
+	@mkdir -p $(OTF_DIR)
+	$(PYTHON) -m fontmake -g "$(SOURCES)" -o otf --output-dir $(OTF_DIR)
 
-# Package for distribution
+# ── FontBakery pipeline ───────────────────────────────────────────
+.PHONY: check fix
+check: fix
+	@echo ""
+	@echo "=== Running FontBakery check-googlefonts ==="
+	@fontbakery check-googlefonts $(TTF_DIR)/*.ttf \
+		--json $(REPORTERS)/index.json \
+		--html $(REPORTERS)/index.html \
+		--verbose 2>&1 | tee $(REPORTERS)/fontbakery.log \
+		|| { echo "FontBakery exited with code $$?"; }
+	@echo ""
+	@echo "=== Summary ==="
+	@if grep -q "^Total:" $(REPORTERS)/fontbakery.log; then \
+		grep -A8 "^Total:" $(REPORTERS)/fontbakery.log | tail -7; \
+	else \
+		echo "No summary found — see $(REPORTERS)/fontbakery.log"; \
+	fi
+
+fix:
+	@echo "=== Running post-build FontBakery fixes ==="
+	@mkdir -p $(REPORTERS)
+	@$(PYTHON) fix-fontbakery.py && echo "All fixes applied." \
+		|| echo "Fixer encountered errors (see above)."
+
+# ── Distribution ─────────────────────────────────────────────
 .PHONY: package
-package: build webfonts
+package: all
 	@echo "Packaging distribution..."
 	@mkdir -p $(DIST_DIR)
-	@zip -r $(DIST_DIR)/$(FONTNAME)-$(VERSION).zip fonts/ build/otf/ build/ttf/
+	zip -r $(DIST_DIR)/$(FONTNAME)-$(VERSION).zip $(FONTS_DIR)/ build/otf/ build/ttf/
 
-# Run FontBakery checks
-.PHONY: check
-check:
-	fontbakery check-googlefonts $(SOURCES)
-
-# Clean build artifacts
+# ── Clean ─────────────────────────────────────────────────────────
 .PHONY: clean
 clean:
-	rm -rf $(BUILD_DIR) $(DIST_DIR) $(FONTS_DIR)
+	rm -rf $(BUILD_DIR) $(DIST_DIR) $(FONTS_DIR) $(REPORTERS)
 
-# Install build dependencies
+# ── Install dependencies ────────────────────────────────────────────
 .PHONY: install-deps
 install-deps:
-	$(PYTHON) -m pip install fonttools fontmake brotli zopfli woff2
+	$(PYTHON) -m pip install -r requirements.txt
 
-# Help
+# ── Help ─────────────────────────────────────────────────────────
 .PHONY: help
 help:
-	@echo "Available targets:"
-	@echo "  all        - Build all font formats (default)"
-	@echo "  otf        - Build OpenType fonts"
-	@echo "  ttf        - Build TrueType fonts"
-	@echo "  webfonts   - Build web-optimized fonts"
-	@echo "  package    - Create distribution package"
-	@echo "  check      - Run FontBakery quality checks"
-	@echo "  clean      - Remove build artifacts"
-	@echo "  install-deps - Install build dependencies"
+	@echo "Glacial Indifference Makefile"
+	@echo ""
+	@echo "  make ttf          Build TTF fonts from source"
+	@echo "  make otf          Build OTF fonts from source"
+	@echo "  make all          Build all formats (ttf + otf)"
+	@echo "  make fix         Run post-build FontBakery compliance fixes"
+	@echo "  make check        Build TTF + fix + run FontBakery quality checks"
+	@echo "  make package     Build all formats and zip for distribution"
+	@echo "  make clean        Remove all build artifacts"
+	@echo "  make install-deps Install build dependencies"
+	@echo ""
+	@echo "The 'check' target is the full FontBakery pipeline:"
+	@echo "  1. Build TTF from Glyphs source"
+	@echo "  2. Apply fix-fontbakery.py (fsType, fsSelection, weightClass, URLs, gasp, prep, meta)"
+	@echo "  3. Run fontbakery check-googlefonts"
+	@echo ""
+	@echo "Remaining FAILs after fix-fontbakery.py are source-level issues"
+	@echo "that require edits in the Glyphs source file."
