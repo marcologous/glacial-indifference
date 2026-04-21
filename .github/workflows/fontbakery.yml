@@ -35,7 +35,7 @@ jobs:
       - name: Run FontBakery
         run: |
           if ls sources/*.glyphs 1> /dev/null 2>&1; then
-            fontbakery check-googlefonts --verbose --html reporters/index.html --json reporters/index.json sources/ || exit 0
+            fontbakery check-googlefonts --verbose --html reporters/index.html --json reporters/index.json sources/
           else
             echo "No source files found, skipping FontBakery"
           fi
