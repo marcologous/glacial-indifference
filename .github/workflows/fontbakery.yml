@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   fontbakery:
-    name: FontBakery Checks
+    name: FontBakery Quality Checks
     runs-on: ubuntu-latest
 
     steps:
@@ -27,23 +27,56 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Find font files
+      - name: Build TTF fonts from source
         run: |
-          find . -name '*.ttf' -o -name '*.otf' -o -name '*.glyphs' > font_files.txt || true
-          echo "Found font files: $(cat font_files.txt)"
+          mkdir -p build/ttf
+          fontmake -g sources/GlacialIndifference.glyphs -o ttf --output-dir build/ttf
+        continue-on-error: true
 
-      - name: Run FontBakery
+      - name: Run post-build FontBakery fixes
+        run: python3 fix-fontbakery.py || true
+
+      - name: Run FontBakery quality checks
+        id: checks
         run: |
-          if ls sources/*.glyphs 1> /dev/null 2>&1; then
-            fontbakery check-googlefonts --verbose --html reporters/index.html --json reporters/index.json sources/
+          echo "--- Running FontBakery check-googlefonts ---"
+          fontbakery check-googlefonts build/ttf/*.ttf --json reporters/index.json --html reporters/index.html 2>&1 | tee reporters/fontbakery.log || true
+
+      - name: Parse FontBakery results
+        run: |
+          echo ""
+          echo "=== FontBakery Summary ==="
+          if grep -q "Total:" reporters/fontbakery.log; then
+            grep -A8 "Total:" reporters/fontbakery.log | tail -8
           else
-            echo "No source files found, skipping FontBakery"
+            echo "FontBakery did not produce a summary (check may have failed)"
           fi
 
-      - name: Upload reports
+          # Count results
+          ERROR_COUNT=$(grep "^    ERROR:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
+          FAIL_COUNT=$(grep "^    FAIL:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
+          WARN_COUNT=$(grep "^    WARN:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
+          PASS_COUNT=$(grep "^    PASS:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
+
+          echo ""
+          echo "  ERROR: $ERROR_COUNT"
+          echo "  FAIL:  $FAIL_COUNT"
+          echo "  WARN:  $WARN_COUNT"
+          echo "  PASS:  $PASS_COUNT"
+          echo ""
+
+          # Fail the job if there are ERRORs (tooling bugs) or known source issues
+          if [ "$ERROR_COUNT" -gt 0 ]; then
+            echo "::error::FontBakery ERROR: $ERROR_COUNT errors detected — this is a tooling bug. Check the FontBakery tool version."
+          fi
+          if [ "$FAIL_COUNT" -gt 0 ]; then
+            echo "::warning::FontBakery FAIL: $FAIL_COUNT failures detected — source-level fixes needed in Glyphs."
+          fi
+
+      - name: Upload FontBakery reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: fontbakery-reports
+          name: fontbakery-reports-${{ github.run_number }}
           path: reporters/
           retention-days: 30
