@@ -29,6 +29,8 @@ jobs:
 
       - name: Build TTF fonts from source
         run: |
+          mkdir -p fonts/ttf
+          fontmake -g sources/GlacialIndifference.glyphs -o ttf --output-dir fonts/ttf
           mkdir -p build/ttf
           fontmake -g sources/GlacialIndifference.glyphs -o ttf --output-dir build/ttf
         continue-on-error: true
@@ -40,6 +42,7 @@ jobs:
         id: checks
         run: |
           echo "--- Running FontBakery check-googlefonts ---"
+          fontbakery check-googlefonts fonts/ttf/*.ttf --json reporters/index.json --html reporters/index.html 2>&1 | tee reporters/fontbakery.log || true
           fontbakery check-googlefonts build/ttf/*.ttf --json reporters/index.json --html reporters/index.html 2>&1 | tee reporters/fontbakery.log || true
 
       - name: Parse FontBakery results

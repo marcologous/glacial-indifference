@@ -10,6 +10,8 @@ from fontTools.ttLib.tables._p_r_e_p import table__p_r_e_p
 import struct
 
 FONTS = [
+    "fonts/ttf/GlacialIndifference-Regular.ttf",
+    "fonts/ttf/GlacialIndifference-Bold.ttf",
     "build/ttf/GlacialIndifference-Regular.ttf",
     "build/ttf/GlacialIndifference-Bold.ttf",
 ]
