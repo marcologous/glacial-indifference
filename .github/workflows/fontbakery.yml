@@ -30,7 +30,23 @@ jobs:
       - name: Build TTF fonts from source
         run: |
           mkdir -p fonts/ttf
-          fontmake -g sources/GlacialIndifference.glyphs -o ttf --output-dir fonts/ttf
+          fontmake -g sources/GlacialIndifference.glyphs -o ttf --output-dir fonts/ttf --filter DecomposeTransformedComponentsFilter
+        continue-on-error: true
+
+      - name: Build OTF fonts from source
+        run: |
+          mkdir -p fonts/otf
+          fontmake -g sources/GlacialIndifference.glyphs -o otf --output-dir fonts/otf
+        continue-on-error: true
+
+      - name: Generate woff/woff2
+        run: python3 -c "
+          from fontTools.ttLib import TTFont
+          for style in ['Bold', 'Regular']:
+            ttf = f'fonts/ttf/GlacialIndifference-{style}.ttf'
+            f = TTFont(ttf); f.flavor = None; f.save(f'fonts/woff/GlacialIndifference-{style}.woff')
+            f2 = TTFont(ttf); f2.flavor = 'woff2'; f2.save(f'fonts/woff2/GlacialIndifference-{style}.woff2')
+        "
         continue-on-error: true
 
       - name: Run post-build FontBakery fixes
@@ -40,23 +56,23 @@ jobs:
         id: checks
         run: |
           echo "--- Running FontBakery check-googlefonts ---"
-          fontbakery check-googlefonts fonts/ttf/*.ttf --json reporters/index.json --html reporters/index.html 2>&1 | tee reporters/fontbakery.log || true
+          fontbakery check-googlefonts fonts/ttf/*.ttf --json reporters/index.json 2>&1 | tee reporters/fontbakery.log || true
 
       - name: Parse FontBakery results
         run: |
           echo ""
           echo "=== FontBakery Summary ==="
-          if grep -q "Total:" reporters/fontbakery.log; then
-            grep -A8 "Total:" reporters/fontbakery.log | tail -8
+          if grep -q "^Total:" reporters/fontbakery.log; then
+            grep -A8 "^Total:" reporters/fontbakery.log | tail -8
           else
             echo "FontBakery did not produce a summary (check may have failed)"
           fi
 
           # Count results
-          ERROR_COUNT=$(grep "^    ERROR:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
-          FAIL_COUNT=$(grep "^    FAIL:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
-          WARN_COUNT=$(grep "^    WARN:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
-          PASS_COUNT=$(grep "^    PASS:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
+          ERROR_COUNT=$(grep "^    ERROR:" reporters/fontbakery.log | grep -oE '[0-9]+' | head -1 || echo "0")
+          FAIL_COUNT=$(grep "^    FAIL:" reporters/fontbakery.log | grep -oE '[0-9]+' | head -1 || echo "0")
+          WARN_COUNT=$(grep "^    WARN:" reporters/fontbakery.log | grep -oE '[0-9]+' | head -1 || echo "0")
+          PASS_COUNT=$(grep "^    PASS:" reporters/fontbakery.log | grep -oE '[0-9]+' | head -1 || echo "0")
 
           echo ""
           echo "  ERROR: $ERROR_COUNT"
@@ -65,12 +81,12 @@ jobs:
           echo "  PASS:  $PASS_COUNT"
           echo ""
 
-          # Fail the job if there are ERRORs (tooling bugs) or known source issues
+          # Fail the job if there are ERRORs (tooling bugs)
           if [ "$ERROR_COUNT" -gt 0 ]; then
-            echo "::error::FontBakery ERROR: $ERROR_COUNT errors detected — this is a tooling bug. Check the FontBakery tool version."
+            echo "::error::FontBakery ERROR: $ERROR_COUNT errors detected — this is a tooling bug."
           fi
           if [ "$FAIL_COUNT" -gt 0 ]; then
-            echo "::warning::FontBakery FAIL: $FAIL_COUNT failures detected — source-level fixes needed in Glyphs."
+            echo "::warning::FontBakery FAIL: $FAIL_COUNT failures detected — source-level fixes needed."
           fi
 
       - name: Upload FontBakery reports
