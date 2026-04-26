@@ -30,23 +30,9 @@ jobs:
       - name: Build TTF fonts from source
         run: |
           mkdir -p fonts/ttf
-          fontmake -g sources/GlacialIndifference.glyphs -o ttf --output-dir fonts/ttf --filter DecomposeTransformedComponentsFilter
-        continue-on-error: true
-
-      - name: Build OTF fonts from source
-        run: |
-          mkdir -p fonts/otf
-          fontmake -g sources/GlacialIndifference.glyphs -o otf --output-dir fonts/otf
-        continue-on-error: true
-
-      - name: Generate woff/woff2
-        run: python3 -c "
-          from fontTools.ttLib import TTFont
-          for style in ['Bold', 'Regular']:
-            ttf = f'fonts/ttf/GlacialIndifference-{style}.ttf'
-            f = TTFont(ttf); f.flavor = None; f.save(f'fonts/woff/GlacialIndifference-{style}.woff')
-            f2 = TTFont(ttf); f2.flavor = 'woff2'; f2.save(f'fonts/woff2/GlacialIndifference-{style}.woff2')
-        "
+          fontmake -g sources/GlacialIndifference.glyphs -o ttf --output-dir fonts/ttf
+          mkdir -p build/ttf
+          fontmake -g sources/GlacialIndifference.glyphs -o ttf --output-dir build/ttf
         continue-on-error: true
 
       - name: Run post-build FontBakery fixes
@@ -56,7 +42,8 @@ jobs:
         id: checks
         run: |
           echo "--- Running FontBakery check-googlefonts ---"
-          fontbakery check-googlefonts fonts/ttf/*.ttf --json reporters/index.json 2>&1 | tee reporters/fontbakery.log || true
+          fontbakery check-googlefonts fonts/ttf/*.ttf --json reporters/index.json --html reporters/index.html 2>&1 | tee reporters/fontbakery.log || true
+          fontbakery check-googlefonts build/ttf/*.ttf --json reporters/index.json --html reporters/index.html 2>&1 | tee reporters/fontbakery.log || true
 
       - name: Parse FontBakery results
         run: |
