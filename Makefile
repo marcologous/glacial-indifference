@@ -30,7 +30,7 @@ build: ttf otf
 ttf:
 	@echo "Building TTF fonts..."
 	@mkdir -p $(TTF_DIR)
-	$(PYTHON) -m fontmake -g "$(SOURCES)" -o ttf --output-dir $(TTF_DIR)
+	$(PYTHON) -m fontmake -g "$(SOURCES)" -o ttf --output-dir $(TTF_DIR) --filter DecomposeTransformedComponentsFilter
 
 otf:
 	@echo "Building OTF fonts..."
@@ -44,9 +44,7 @@ check: fix
 	@echo "=== Running FontBakery check-googlefonts ==="
 	@fontbakery check-googlefonts $(TTF_DIR)/*.ttf \
 		--json $(REPORTERS)/index.json \
-		--html $(REPORTERS)/index.html \
-		--verbose 2>&1 | tee $(REPORTERS)/fontbakery.log \
-		|| { echo "FontBakery exited with code $$?"; }
+		--verbose 2>&1 | tee $(REPORTERS)/fontbakery.log
 	@echo ""
 	@echo "=== Summary ==="
 	@if grep -q "^Total:" $(REPORTERS)/fontbakery.log; then \
@@ -66,12 +64,13 @@ fix:
 package: all
 	@echo "Packaging distribution..."
 	@mkdir -p $(DIST_DIR)
-	zip -r $(DIST_DIR)/$(FONTNAME)-$(VERSION).zip $(FONTS_DIR)/ build/otf/ build/ttf/
+	zip -r $(DIST_DIR)/$(FONTNAME)-$(VERSION).zip $(FONTS_DIR)/
 
 # ── Clean ─────────────────────────────────────────────────────────
 .PHONY: clean
 clean:
-	rm -rf $(DIST_DIR) $(FONTS_DIR)/ttf $(FONTS_DIR)/otf $(FONTS_DIR)/woff $(FONTS_DIR)/woff2 $(REPORTERS)
+	rm -f $(FONTS_DIR)/*.ttf $(FONTS_DIR)/*.otf $(FONTS_DIR)/*.woff $(FONTS_DIR)/*.woff2 $(FONTS_DIR)/METADATA.pb $(FONTS_DIR)/OFL.txt
+	rm -rf $(DIST_DIR) $(REPORTERS)
 
 # ── Install dependencies ────────────────────────────────────────────
 .PHONY: install-deps

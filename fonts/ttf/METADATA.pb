@@ -3,6 +3,10 @@ designer: "Alfredo Marco Pradil"
 license: "OFL"
 category: "DISPLAY"
 date_added: "2026-04-19"
+subsets: [
+  "latin",
+  "menu"
+]
 
 fonts {
   name: "Glacial Indifference"

@@ -8,22 +8,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- GitHub Actions workflow for FontBakery quality checks
-- Initial source files in Glyphs format
+- Source edits to fix nested_components (decomposed to outlines)
+- Additional glyphs fixed for rendering compliance
 
-### Planned
-- Build process for TTF/OTF binaries
-- Web font optimization (WOFF2)
-- Extended character support
-- Italic variant
-
-## [1.312] - 2024-04-19
+## [1.322] - 2026-04-26
 
 ### Added
-- Initial release of Glacial Indifference
-- Regular and Bold weights in Glyphs source format
-- Basic Latin character set
-- Open Font License (OFL)
+- Source file updates: glyphs converted from components to outlines
+- FontBakery check run with dated logs
 
-[Unreleased]: https://github.com/marcologous/glacial-indifference/compare/v1.312...HEAD
-[1.312]: https://github.com/marcologous/glacial-indifference/releases/tag/v1.312
+### Changed
+- Continued FontBakery compliance improvements
+- Reporters directory: JSON log only (no HTML)
+
+### Fixed
+- nested_components issue resolved (source edits)
+
+### Known Issues
+- freetype_rasterizer: FreeType crashes on outline
+- smart_dropout: Missing prep table instructions
+- ttx_roundtrip: TTX roundtrip issues
+
+## [1.321] - 2026-04-26
+
+### Added
+- DecomposeTransformedComponentsFilter in build process
+- METADATA.pb with subsets: [latin, menu]
+- OFL.txt with canonical SIL OFL 1.1 text
+- Fixed name[13] (LICENSE DESCRIPTION) post-build
+
+### Changed
+- Rebuild with fontmake filter for transformed components
+- Directory structure: fonts/ttf/, fonts/otf/, fonts/woff/, fonts/woff2/
+- Source: converted 7 transformed component glyphs to outlines
+
+### Fixed
+- FontBakery compliance fixes applied post-build
