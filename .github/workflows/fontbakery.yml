@@ -49,17 +49,17 @@ jobs:
         run: |
           echo ""
           echo "=== FontBakery Summary ==="
-          if grep -q "Total:" reporters/fontbakery.log; then
-            grep -A8 "Total:" reporters/fontbakery.log | tail -8
+          if grep -q "^Total:" reporters/fontbakery.log; then
+            grep -A8 "^Total:" reporters/fontbakery.log | tail -8
           else
             echo "FontBakery did not produce a summary (check may have failed)"
           fi
 
           # Count results
-          ERROR_COUNT=$(grep "^    ERROR:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
-          FAIL_COUNT=$(grep "^    FAIL:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
-          WARN_COUNT=$(grep "^    WARN:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
-          PASS_COUNT=$(grep "^    PASS:" reporters/fontbakery.log | grep -oP '\d+' | head -1 || echo "0")
+          ERROR_COUNT=$(grep "^    ERROR:" reporters/fontbakery.log | grep -oE '[0-9]+' | head -1 || echo "0")
+          FAIL_COUNT=$(grep "^    FAIL:" reporters/fontbakery.log | grep -oE '[0-9]+' | head -1 || echo "0")
+          WARN_COUNT=$(grep "^    WARN:" reporters/fontbakery.log | grep -oE '[0-9]+' | head -1 || echo "0")
+          PASS_COUNT=$(grep "^    PASS:" reporters/fontbakery.log | grep -oE '[0-9]+' | head -1 || echo "0")
 
           echo ""
           echo "  ERROR: $ERROR_COUNT"
@@ -68,12 +68,12 @@ jobs:
           echo "  PASS:  $PASS_COUNT"
           echo ""
 
-          # Fail the job if there are ERRORs (tooling bugs) or known source issues
+          # Fail the job if there are ERRORs (tooling bugs)
           if [ "$ERROR_COUNT" -gt 0 ]; then
-            echo "::error::FontBakery ERROR: $ERROR_COUNT errors detected — this is a tooling bug. Check the FontBakery tool version."
+            echo "::error::FontBakery ERROR: $ERROR_COUNT errors detected — this is a tooling bug."
           fi
           if [ "$FAIL_COUNT" -gt 0 ]; then
-            echo "::warning::FontBakery FAIL: $FAIL_COUNT failures detected — source-level fixes needed in Glyphs."
+            echo "::warning::FontBakery FAIL: $FAIL_COUNT failures detected — source-level fixes needed."
           fi
 
       - name: Upload FontBakery reports
