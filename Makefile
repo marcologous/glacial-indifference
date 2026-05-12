@@ -32,12 +32,12 @@ build: ttf otf
 ttf:
 	@echo "Building TTF fonts..."
 	@mkdir -p $(TTF_DIR)
-	$(PYTHON) -m fontmake -g "$(SOURCES)" -o ttf --output-dir $(TTF_DIR) --filter DecomposeTransformedComponentsFilter
+	$(PYTHON) -m fontmake -g "$(SOURCES)" -i -o ttf --output-dir $(TTF_DIR) --filter DecomposeTransformedComponentsFilter
 
 otf:
 	@echo "Building OTF fonts..."
 	@mkdir -p $(OTF_DIR)
-	$(PYTHON) -m fontmake -g "$(SOURCES)" -o otf --output-dir $(OTF_DIR)
+	$(PYTHON) -m fontmake -g "$(SOURCES)" -i -o otf --output-dir $(OTF_DIR)
 
 # ── FontBakery pipeline ───────────────────────────────────────────
 .PHONY: check fix

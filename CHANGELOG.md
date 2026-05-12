@@ -8,8 +8,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Source edits to fix nested_components (decomposed to outlines)
-- Additional glyphs fixed for rendering compliance
+- 4 font instances: Regular (400), Medium (500), SemiBold (600), Bold (700)
+- All font formats: TTF, OTF, woff, woff2
+- Updated fix-fontbakery.py for all instances
+- Updated METADATA.pb with all 4 fonts
+
+### Changed
+- CI workflow updated for full build pipeline (TTF, OTF, woff, woff2)
+- Removed HTML output from fontbakery (JSON only)
+
+## [1.323] - 2026-05-12
+
+### Added
+- Source edits: Additional glyphs converted from components to outlines
+- FontBakery check run with dated logs
+
+### Changed
+- Continued FontBakery compliance improvements
+
+### Known Issues (Source Edits Required)
+- freetype_rasterizer: FreeType crashes on outline
+- smart_dropout: Missing prep table instructions
+- ttx_roundtrip: TTX roundtrip issues
+- family/win_ascent_and_descent: OS/2 table metrics
 
 ## [1.322] - 2026-04-26
 

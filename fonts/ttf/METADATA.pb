@@ -2,7 +2,7 @@ name: "Glacial Indifference"
 designer: "Alfredo Marco Pradil"
 license: "OFL"
 category: "DISPLAY"
-date_added: "2026-04-19"
+date_added: "2026-05-12"
 subsets: [
   "latin",
   "menu"
@@ -15,6 +15,26 @@ fonts {
   filename: "GlacialIndifference-Regular.ttf"
   post_script_name: "GlacialIndifference-Regular"
   full_name: "Glacial Indifference Regular"
+  copyright: "Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)"
+}
+
+fonts {
+  name: "Glacial Indifference"
+  style: "normal"
+  weight: 500
+  filename: "GlacialIndifference-Medium.ttf"
+  post_script_name: "GlacialIndifference-Medium"
+  full_name: "Glacial Indifference Medium"
+  copyright: "Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)"
+}
+
+fonts {
+  name: "Glacial Indifference"
+  style: "normal"
+  weight: 600
+  filename: "GlacialIndifference-SemiBold.ttf"
+  post_script_name: "GlacialIndifference-SemiBold"
+  full_name: "Glacial Indifference SemiBold"
   copyright: "Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)"
 }
 
