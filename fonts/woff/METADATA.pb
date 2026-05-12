@@ -12,7 +12,7 @@ fonts {
   name: "Glacial Indifference"
   style: "normal"
   weight: 400
-  filename: "GlacialIndifference-Regular.otf"
+  filename: "GlacialIndifference-Regular.woff"
   post_script_name: "GlacialIndifference-Regular"
   full_name: "Glacial Indifference Regular"
   copyright: "Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)"
@@ -22,7 +22,7 @@ fonts {
   name: "Glacial Indifference"
   style: "normal"
   weight: 500
-  filename: "GlacialIndifference-Medium.otf"
+  filename: "GlacialIndifference-Medium.woff"
   post_script_name: "GlacialIndifference-Medium"
   full_name: "Glacial Indifference Medium"
   copyright: "Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)"
@@ -32,7 +32,7 @@ fonts {
   name: "Glacial Indifference"
   style: "normal"
   weight: 600
-  filename: "GlacialIndifference-SemiBold.otf"
+  filename: "GlacialIndifference-SemiBold.woff"
   post_script_name: "GlacialIndifference-SemiBold"
   full_name: "Glacial Indifference SemiBold"
   copyright: "Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)"
@@ -42,7 +42,7 @@ fonts {
   name: "Glacial Indifference"
   style: "normal"
   weight: 700
-  filename: "GlacialIndifference-Bold.otf"
+  filename: "GlacialIndifference-Bold.woff"
   post_script_name: "GlacialIndifference-Bold"
   full_name: "Glacial Indifference Bold"
   copyright: "Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)"

@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- 4 font instances: Regular (400), Medium (500), SemiBold (600), Bold (700)
+- All font formats: TTF, OTF, woff, woff2
+- Updated fix-fontbakery.py for all instances
+- Updated METADATA.pb with all 4 fonts
+
 ### Changed
 - CI workflow updated for full build pipeline (TTF, OTF, woff, woff2)
 - Removed HTML output from fontbakery (JSON only)
-- Updated fontbakery workflow to include all font formats
 
 ## [1.323] - 2026-05-12
 

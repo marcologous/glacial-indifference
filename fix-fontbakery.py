@@ -11,6 +11,8 @@ import struct
 
 FONTS = [
     "fonts/ttf/GlacialIndifference-Regular.ttf",
+    "fonts/ttf/GlacialIndifference-Medium.ttf",
+    "fonts/ttf/GlacialIndifference-SemiBold.ttf",
     "fonts/ttf/GlacialIndifference-Bold.ttf",
 ]
 
@@ -94,7 +96,7 @@ def fix_all(font_path):
     # 2. fsSelection — add USE_TYPO_METRICS (bit 7)
     old_fs = ttf["OS/2"].fsSelection
     val = 0x80
-    if is_bold:
+    if is_bold and not ("SemiBold" in filename or "Medium" in filename):
         val |= 0x20
     if is_regular:
         val |= 0x40
@@ -102,9 +104,17 @@ def fix_all(font_path):
     print(f"  fsSelection: 0x{old_fs:04X} → 0x{ttf['OS/2'].fsSelection:04X}")
 
     # 3. usWeightClass
-    if is_bold:
-        old_wc = ttf["OS/2"].usWeightClass
-        ttf["OS/2"].usWeightClass = 700
+    old_wc = ttf["OS/2"].usWeightClass
+    if is_bold and not ("SemiBold" in filename or "Medium" in filename):
+        target_wc = 700
+    elif "SemiBold" in filename:
+        target_wc = 600
+    elif "Medium" in filename:
+        target_wc = 500
+    else:
+        target_wc = 400
+    if old_wc != target_wc:
+        ttf["OS/2"].usWeightClass = target_wc
         print(f"  usWeightClass: {old_wc} → {ttf['OS/2'].usWeightClass}")
 
     # 4. HTTPS in name table
