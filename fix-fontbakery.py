@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-fix-glacial.py — Post-build fixes for FontBakery compliance.
+fix-fontbakery.py — Post-build fixes for FontBakery compliance.
 Fixes the Google Fonts profile checks that can be addressed post-compilation.
 """
 from fontTools.ttLib import TTFont, registerCustomTableClass
@@ -22,7 +22,7 @@ FONTS = [
 # -------------------------------------------------------------------
 
 class table__m_e_t_a(DefaultTable):
-    """'meta' table using the fontbakery/woff2 meta format."""
+    """'meta' table with proper text-tag format."""
 
     def compile(self, ttFont):
         entries = [('dlng', 'Latn'), ('slng', 'Latn')]
@@ -44,13 +44,24 @@ class table__m_e_t_a(DefaultTable):
         return header + bytes(records) + bytes(strBuf)
 
     def decompile(self, data, ttFont):
-        pass
+        version, flags, dataOffset, numRec = struct.unpack('>IIII', data[:16])
+        self.data = {}
+        for i in range(numRec):
+            off = 16 + i * 12
+            tag = data[off:off+4].decode('ascii')
+            relOffset, sLen = struct.unpack('>II', data[off+4:off+12])
+            s = data[dataOffset + relOffset:dataOffset + relOffset + sLen].decode('ascii')
+            self.data[tag] = s
 
     def toXML(self, writer, ttFont):
-        pass
+        for tag, val in getattr(self, 'data', {'dlng': 'Latn', 'slng': 'Latn'}).items():
+            writer.simpletag(tag, val)
+            writer.newline()
 
     def fromXML(self, name, attrs, content, ttFont):
-        pass
+        if not hasattr(self, 'data'):
+            self.data = {}
+        self.data[name] = attrs.get('init', attrs.get('value', ''))
 
 
 registerCustomTableClass('meta', __name__, 'table__m_e_t_a')
@@ -61,9 +72,14 @@ registerCustomTableClass('meta', __name__, 'table__m_e_t_a')
 # -------------------------------------------------------------------
 
 def make_prep_program():
+    """Smart dropout prep program per FontBakery spec."""
     from fontTools.ttLib.tables import ttProgram
     prog = ttProgram.Program()
-    prog.fromBytecode(bytes([0xB0, 0x00, 0x89]))
+    # B8 01 FF    PUSHW 0x01FF
+    # 85          SCANCTRL (unconditionally turn on dropout control mode)
+    # B0 04       PUSHB 0x04
+    # 8D          SCANTYPE (enable smart dropout control: rules 1, 2, 5)
+    prog.fromBytecode(bytes([0xB8, 0x01, 0xFF, 0x85, 0xB0, 0x04, 0x8D]))
     return prog
 
 
@@ -81,31 +97,35 @@ def make_gasp():
 def fix_all(font_path):
     ttf = TTFont(font_path)
     filename = font_path.split("/")[-1]
-    is_bold = "Bold" in filename
+    is_bold = "Bold" in filename and "SemiBold" not in filename
     is_regular = "Regular" in filename
 
     print(f"\n{'='*60}")
     print(f"  Fixing: {filename}")
     print(f"{'='*60}")
 
-    # 1. fsType → 0
+    # 1. fsType -> 0 (installable embedding)
     old = ttf["OS/2"].fsType
     ttf["OS/2"].fsType = 0
-    print(f"  fsType: {old} → {ttf['OS/2'].fsType}")
+    print(f"  fsType: {old} -> {ttf['OS/2'].fsType}")
 
-    # 2. fsSelection — add USE_TYPO_METRICS (bit 7)
+    # 2. fsSelection — bit 7 (USE_TYPO_METRICS) + bits 0/5/6 per style
+    # Per fontbakery opentype/fsselection check:
+    # - bit 6 (REGULAR) = set for non-bold, clear for Bold
+    # - bit 5 (BOLD) = set for Bold only
+    # - bit 7 (USE_TYPO_METRICS) = always set
     old_fs = ttf["OS/2"].fsSelection
-    val = 0x80
-    if is_bold and not ("SemiBold" in filename or "Medium" in filename):
-        val |= 0x20
-    if is_regular:
-        val |= 0x40
+    val = 0x80  # USE_TYPO_METRICS (bit 7) always set
+    if is_bold:
+        val |= 0x20  # BOLD bit only, no REGULAR bit for Bold weight
+    else:
+        val |= 0x40  # REGULAR bit for non-bold weights
     ttf["OS/2"].fsSelection = val
-    print(f"  fsSelection: 0x{old_fs:04X} → 0x{ttf['OS/2'].fsSelection:04X}")
+    print(f"  fsSelection: 0x{old_fs:04X} -> 0x{ttf['OS/2'].fsSelection:04X}")
 
     # 3. usWeightClass
     old_wc = ttf["OS/2"].usWeightClass
-    if is_bold and not ("SemiBold" in filename or "Medium" in filename):
+    if is_bold:
         target_wc = 700
     elif "SemiBold" in filename:
         target_wc = 600
@@ -115,31 +135,41 @@ def fix_all(font_path):
         target_wc = 400
     if old_wc != target_wc:
         ttf["OS/2"].usWeightClass = target_wc
-        print(f"  usWeightClass: {old_wc} → {ttf['OS/2'].usWeightClass}")
+        print(f"  usWeightClass: {old_wc} -> {ttf['OS/2'].usWeightClass}")
 
-    # 4. HTTPS in name table
-    ofl_https = "https://scripts.sil.org/OFL"
+    # 4. HTTPS in name table (nameID 14 / license URL)
     for n in ttf["name"].names:
         if n.platformID == 3 and n.platEncID == 1:
             try:
                 s = n.toStr()
             except:
                 s = str(n)
-            if s.startswith("http:"):
-                n.string = s.replace("http:", "https:", 1).encode("utf-16-be")
+            if "http://" in s:
+                n.string = s.replace("http://", "https://", 1).encode("utf-16-be")
                 n.length = len(n.string)
-                print(f"  name[{n.nameID}] HTTPS upgrade")
+                print(f"  name[{n.nameID}] http -> https")
 
-    # 5. Add 'gasp' table
+    # 5. Fix usWinDescent (must be >= 914 per fontbakery)
+    old_wd = ttf["OS/2"].usWinDescent
+    if old_wd < 914:
+        ttf["OS/2"].usWinDescent = 914
+        # Adjust usWinAscent to keep sum consistent
+        old_wa = ttf["OS/2"].usWinAscent
+        diff = 914 - old_wd
+        ttf["OS/2"].usWinAscent = old_wa + diff
+        print(f"  usWinDescent: {old_wd} -> 914 (usWinAscent: {old_wa} -> {ttf['OS/2'].usWinAscent})")
+
+    # 6. Add 'gasp' table (grid-fitting/scaling)
     ttf["gasp"] = make_gasp()
     print(f"  gasp: added")
 
-    # 6. Add 'prep' table
+    # 7. Add 'prep' table with smart dropout instructions
     ttf["prep"] = table__p_r_e_p()
     ttf["prep"].program = make_prep_program()
-    print(f"  prep: added")
+    bc = bytes(ttf["prep"].program.getBytecode()).hex()
+    print(f"  prep: added (smart dropout, bytecode: {bc})")
 
-    # 7. Add 'meta' table
+    # 8. Add 'meta' table (dlng/slng)
     ttf["meta"] = table__m_e_t_a()
     print(f"  meta: added (dlng=Latn, slng=Latn)")
 
@@ -157,7 +187,7 @@ def fix_all(font_path):
         print(f"  Dotted Circle: MISSING — add to Glyphs source")
 
     ttf.save(font_path)
-    print(f"\n  ✓ Saved: {font_path}")
+    print(f"\n  Saved: {font_path}")
 
 
 if __name__ == "__main__":
