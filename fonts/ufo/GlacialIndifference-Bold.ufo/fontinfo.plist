@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>ascender</key>
+    <integer>1612</integer>
+    <key>capHeight</key>
+    <integer>1462</integer>
+    <key>copyright</key>
+    <string>Copyright 2019 The Glacial Indifference Project Authors (https://github.com/marcologous/glacial-indifference)</string>
+    <key>descender</key>
+    <integer>-538</integer>
+    <key>familyName</key>
+    <string>Glacial Indifference</string>
+    <key>italicAngle</key>
+    <integer>0</integer>
+    <key>openTypeHeadCreated</key>
+    <string>2026/05/13 21:36:17</string>
+    <key>openTypeHheaAscender</key>
+    <integer>2000</integer>
+    <key>openTypeHheaDescender</key>
+    <integer>-538</integer>
+    <key>openTypeNameDesigner</key>
+    <string>Alfredo Marco Pradil</string>
+    <key>openTypeNameDesignerURL</key>
+    <string>https://www.behance.net/pradil</string>
+    <key>openTypeNameLicense</key>
+    <string>http://scripts.sil.org/OFL</string>
+    <key>openTypeNameLicenseURL</key>
+    <string>http://scripts.sil.org/OFL</string>
+    <key>openTypeNameManufacturer</key>
+    <string>Hanken Design Co.</string>
+    <key>openTypeNameManufacturerURL</key>
+    <string>https://hanken.co</string>
+    <key>openTypeOS2Type</key>
+    <array>
+      <integer>3</integer>
+    </array>
+    <key>openTypeOS2TypoAscender</key>
+    <integer>2000</integer>
+    <key>openTypeOS2TypoDescender</key>
+    <integer>-538</integer>
+    <key>openTypeOS2TypoLineGap</key>
+    <integer>0</integer>
+    <key>openTypeOS2WinAscent</key>
+    <integer>2040</integer>
+    <key>openTypeOS2WinDescent</key>
+    <integer>578</integer>
+    <key>postscriptBlueValues</key>
+    <array>
+      <integer>-24</integer>
+      <integer>0</integer>
+      <integer>948</integer>
+      <integer>972</integer>
+      <integer>1462</integer>
+      <integer>1486</integer>
+      <integer>1612</integer>
+      <integer>1636</integer>
+    </array>
+    <key>postscriptOtherBlues</key>
+    <array>
+      <integer>-562</integer>
+      <integer>-538</integer>
+    </array>
+    <key>postscriptStemSnapH</key>
+    <array>
+      <integer>258</integer>
+    </array>
+    <key>postscriptStemSnapV</key>
+    <array>
+      <integer>322</integer>
+    </array>
+    <key>postscriptUnderlinePosition</key>
+    <integer>-100</integer>
+    <key>postscriptUnderlineThickness</key>
+    <integer>50</integer>
+    <key>styleMapFamilyName</key>
+    <string>Glacial Indifference</string>
+    <key>styleMapStyleName</key>
+    <string>bold</string>
+    <key>styleName</key>
+    <string>Bold</string>
+    <key>unitsPerEm</key>
+    <integer>2000</integer>
+    <key>versionMajor</key>
+    <integer>1</integer>
+    <key>versionMinor</key>
+    <integer>324</integer>
+    <key>xHeight</key>
+    <integer>948</integer>
+  </dict>
+</plist>
