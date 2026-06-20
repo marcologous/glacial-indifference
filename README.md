@@ -50,7 +50,7 @@ Or use the WOFF2 files directly from the repository:
 
 ### Requirements
 
-- [FontLab](https://www.fontlab.com/) or [Glyphs](https://glyphsapp.com/) (for editing)
+- [Glyphs](https://glyphsapp.com/) (for editing)
 - [fonttools](https://github.com/fonttools/fonttools) (for building)
 - [woff2](https://github.com/google/woff2) (for compression)
 
@@ -84,10 +84,6 @@ Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTIN
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. Available versions are listed on the [releases page](https://github.com/marcologous/glacial-indifference/releases).
 
 ## Authors
 
